@@ -22,7 +22,7 @@ def get_amenity(id):
     return jsonify(obj.to_dict())
 
 
-@app_views.route('/amenitiess/<id>', methods=['DELETE'])
+@app_views.route('/amenities/<id>', methods=['DELETE'])
 def delete_amenity(id):
     """deletes a Amenity object"""
     obj = storage.get(Amenity, id)
@@ -33,7 +33,7 @@ def delete_amenity(id):
     return (jsonify({}), 200)
 
 
-@app_views.route('/amenity/', methods=['POST'])
+@app_views.route('/amenities/', methods=['POST'])
 def create_amenity():
     """create a new Amenity object"""
     if not request.get_json():
