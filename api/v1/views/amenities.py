@@ -57,7 +57,7 @@ def update_amenities(id):
     obj = storage.get(Amenity, id)
     if obj is None:
         abort(404)
-
+    
     if not dic:
         abort(400, "Not a JSON")
     for key, value in dic.items():
