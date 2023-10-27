@@ -61,7 +61,7 @@ def update_amenities(id):
     if not dic:
         abort(400, "Not a JSON")
     for key, value in dic.items():
-        if key is not "created_at" and key is not "updated_at":
+        if key != "created_at" and key != "updated_at" and key != "id":
             setattr(obj, key, value)
     storage.save()
     return jsonify(obj.to_dict()), 200
