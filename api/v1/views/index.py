@@ -18,14 +18,15 @@ from models.user import User
 def status():
     return jsonify({"status": "OK"})
 
+
 @app_views.route('/stats', methods=['GET'])
 def stats():
     """retrieves the number of each objects by type"""
     dic = {}
 
     classes = {"users": "User", "places": "Place", "states": "State",
-           "cities": "City", "amenities": "Amenity",
-           "reviews": "Review"}
+               "cities": "City", "amenities": "Amenity",
+               "reviews": "Review"}
 
     for cls in classes:
         dic[cls] = storage.count(classes[cls])
