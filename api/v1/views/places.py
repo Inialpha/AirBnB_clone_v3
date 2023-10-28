@@ -12,7 +12,7 @@ from models import storage
 def get_places_link_to_city(city_id):
     """retrieves all places linked to <city_id objects"""
     city = storage.get(City, city_id)
-    if not city:
+    if city is None:
         abort(404)
 
     dic = ([place.to_dict() for place in city.places])
@@ -57,10 +57,10 @@ def create_place(city_id):
         abort(404)
     if 'name' not in req:
         abort(400, 'Missing name')
-    new_place = Place()
-    for attr, value in req.items():
-        setattr(new_place, attr, value)
-    new_place.city_id = city_id
+    req['city_id'] = city_id
+    new_place = Place(**req)
+    # for attr, value in req.items():
+        # setattr(new_place, attr, value)
     storage.new(new_place)
 
     storage.save()
