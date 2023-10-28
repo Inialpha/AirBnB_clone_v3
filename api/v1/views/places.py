@@ -1,7 +1,10 @@
+#!/usr/bin/python3
+"""this module handles all default RESTFul API actions for Place"""
+from api.v1.views import app_views
 from flask import jsonify, abort, request
 from models.city import City
-from models.user import User
 from models.place import Place
+from models.user import User
 from models import storage
 
 
