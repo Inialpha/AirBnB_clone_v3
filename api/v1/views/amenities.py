@@ -63,5 +63,5 @@ def update_amenities(id):
     for key, value in dic.items():
         if key != "created_at" and key != "updated_at" and key != "id":
             setattr(obj, key, value)
-    storage.save()
+    obj.save()
     return jsonify(obj.to_dict()), 200
