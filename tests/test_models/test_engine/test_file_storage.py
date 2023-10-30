@@ -108,8 +108,27 @@ class TestFileStorage(unittest.TestCase):
         storage.save()
         FileStorage._FileStorage__objects = save
         for key, value in new_dict.items():
-            new_dict[key] = value.to_dict()
+            new_dict[key] = value.to_dict(False)
         string = json.dumps(new_dict)
         with open("file.json", "r") as f:
             js = f.read()
         self.assertEqual(json.loads(string), json.loads(js))
+
+    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
+    def test_get(self):
+        """test that get properly retrives an object base on the id"""
+        storage = FileStorage()
+        save = FileStorage._FileStorage__objects
+        for key, value in classes.items():
+            with self.subTest(key=key, value=value):
+                instance = value()
+                storage.new(instance)
+                self.assertEqual(storage.get(value, instance.id), instance)
+        FileStorage._FileStorage__objects = save
+
+    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
+    def test_count(self):
+        """test count"""
+        storage = FileStorage()
+        self.assertEqual(len(storage.all()), storage.count())
+        self.assertEqual(len(storage.all(Amenity)), storage.count(Amenity))
