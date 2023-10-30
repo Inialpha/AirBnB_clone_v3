@@ -24,28 +24,33 @@ def get_place_amenities(place_id):
     return jsonify(amenities)
 
 
-@app_views.route('/places/<place_id>/amenities/<amenity_id>',
-                 methods=['POST', 'DELETE'], strict_slashes=False)
-def manage_place_amenity(place_id, amenity_id):
-    """manage amenities"""
+@app_views.route('/places/<string:place_id>/amenities/<string:amenity_id>',
+                 methods=['DELETE'], strict_slashes=False)
+def delete_place_amenity(place_id, amenity_id):
+    """deletes an amenity object from a place"""
     place = storage.get(place_class, place_id)
     amenity = storage.get(amenity_class, amenity_id)
-
-    if place is None:
-        abort(404)
-    if amenity is None:
+    if place is None or amenity is None:
         abort(404)
 
-    if request.method == 'DELETE':
-        if amenity not in place.amenities:
-            abort(404)
-        place.amenities.remove(amenity)
-        storage.save()
-        return jsonify({}), 200
+    if amenity not in place.amenities:
+        abort(404)
+    place.amenities.remove(amenity)
+    storage.save()
+    return jsonify({})
 
-    if request.method == 'POST':
-        if amenity in place.amenities:
-            return jsonify(amenity.to_dict()), 200
-        place.amenities.append(amenity)
-        storage.save()
-        return jsonify(amenity.to_dict()), 201
+
+@app_views.route('/places/<string:place_id>/amenities/<string:amenity_id>',
+                 methods=['POST'], strict_slashes=False)
+def post_place_amenity(place_id, amenity_id):
+    """adds an amenity object to a place"""
+    place = storage.get(place_class, place_id)
+    amenity = storage.get(amenity_class, amenity_id)
+    if place is None or amenity is None:
+        abort(404)
+
+    if amenity in place.amenities:
+        return jsonify(amenity.to_dict()), 200
+    place.amenities.append(amenity)
+    storage.save()
+    return make_response(jsonify(amenity.to_dict()), 201)
